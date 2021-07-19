@@ -10,7 +10,7 @@ let trainButton;
 let saveDataButton;
 let radioDiv;
 let notesRadio;
-
+let saveModelButton;
 // Global ML Variables
 let model;
 let state;
@@ -43,7 +43,7 @@ function setup() {
   };
   model = ml5.neuralNetwork(options);
   // new code below
-
+  model.loadData("model/2021-7-19_11-2-4")
   createMusicSystem();
 }
 
@@ -70,8 +70,12 @@ function buildButtons() {
     model.saveData();
   });
   saveDataButton.parent(buttonDiv);
+  saveModelButton.parent(buttonDiv);
+  saveModelButton.parent(function() {
+    model.save();
+  });
   // new code below
-
+  saveModelButton.style("display", "none");
 }
 
 function createMusicSystem() {
@@ -94,7 +98,8 @@ function trainModel() {
   };
   model.train(options, whileTraining, finishedTraining);
   // new code below
-
+  trainButton.style("display", "none");
+  saveDataButton.style("display", "none");
   radioDiv.style("display", "none");
 }
 
@@ -106,7 +111,7 @@ function finishedTraining() {
   state = "prediction";
   textP.html("Step 3: Prediction");
   // new code below
-
+  saveModelButton.style("display", "inline");
 }
 
 function drawNote(note, noteColor, ellipseColor) {
